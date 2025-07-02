@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Prosty czat lokalny z nickiem</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #login, #chat {
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    #chat {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #messages {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 15px 0;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 5px;
+    }
+
+    #messages li {
+      padding: 10px 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    #messages li:last-child {
+      border-bottom: none;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 110px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 90px;
+      padding: 10px;
+      margin-left: 10px;
+      background-color: #3b82f6;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="login">
+    <h2>Podaj swój nick</h2>
+    <input type="text" id="nickname" placeholder="Np. Kuba123" autocomplete="off" />
+    <button id="enterChat">Wejdź</button>
+  </div>
+
+  <div id="chat">
+    <h2>Czat lokalny - <span id="displayNick"></span></h2>
+
+    <ul id="messages"></ul>
+    <input type="text" id="msg" placeholder="Napisz wiadomość" autocomplete="off" />
+    <button id="sendMsg">Wyślij</button>
+  </div>
+
+  <script>
+    const loginDiv = document.getElementById('login');
+    const chatDiv = document.getElementById('chat');
+    const nicknameInput = document.getElementById('nickname');
+    const enterChatBtn = document.getElementById('enterChat');
+
+    const messages = document.getElementById('messages');
+    const msgInput = document.getElementById('msg');
+    const sendMsgBtn = document.getElementById('sendMsg');
+    const displayNick = document.getElementById('displayNick');
+
+    let nickname = '';
+
+    enterChatBtn.onclick = () => {
+      const nick = nicknameInput.value.trim();
+      if (nick === '') {
+        alert('Podaj nick!');
+        return;
+      }
+      nickname = nick;
+      displayNick.textContent = nickname;
+      loginDiv.style.display = 'none';
+      chatDiv.style.display = 'block';
+      msgInput.focus();
+    };
+
+    function sendMessage() {
+      const text = msgInput.value.trim();
+      if (text === '') return;
+      const li = document.createElement('li');
+      li.textContent = nickname + ': ' + text;
+      messages.appendChild(li);
+      msgInput.value = '';
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    sendMsgBtn.onclick = sendMessage;
+
+    msgInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>
